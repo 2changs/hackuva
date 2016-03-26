@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/local.css') }}" />
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!-- you need to include the shieldui css and js assets in order for the charts to work -->
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+    <link id="gridcss" rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/dark-bootstrap/all.min.css" />
+
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+    <script type="text/javascript" src="http://www.prepbootstrap.com/Content/js/gridData.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+          <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Search Engine</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul id="active" class="nav navbar-nav side-nav">
+                    <li><a href="/"><i class="fa fa-list-ul"></i> Search</a></li>
+                    <li><a href="/news"><i class="fa fa-globe"></i> News</a></li>
+                    <li class="selected"><a href="/analytics"><i class="fa fa-tasks"></i> Analytics</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right navbar-user">
+                     <li class="dropdown user-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Bryan Chen<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i class="fa fa-power-off"></i> Log Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Analytics</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> News Volume</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="shieldui-chart1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Sentiment Analysis</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="shieldui-chart2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Entities, Types, and Relevance</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="shieldui-grid1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            var performance = [12, 43, 34, 22, 12, 33, 4, 17, 22, 34, 54, 67],
+                visits = [83, 23, 420],
+                entities = [{'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '10 percent'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Jack Daly'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Mr. Dobkin'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'mutual funds'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Luke Thorburn'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Mr. Trump'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'executive'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Matthew Westerman'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'co-chief'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'investment banker'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'chairman'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Tim Leissner'}, {'Relevance': '0.33', 'Type': 'Region', 'Entity': 'Southeast Asia'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Mr. Levy'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'partner'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Centerview'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'boutique investment bank'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$2 billion'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Hillary Clinton'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Bernie Sanders'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'U.S.'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'JP Morgan Securities'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Morgan Stanley'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': 'three years'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '15 percent'}, {'Relevance': '0.934806', 'Type': 'Person', 'Entity': 'Joyce Goldman'}, {'Relevance': '0.406474', 'Type': 'Person', 'Entity': 'Glen Allen'}, {'Relevance': '0.401217', 'Type': 'FieldTerminology', 'Entity': 'New Yorker'}, {'Relevance': '0.371442', 'Type': 'Person', 'Entity': 'Joyce'}, {'Relevance': '0.272308', 'Type': 'StateOrCounty', 'Entity': 'Virginia'}, {'Relevance': '0.168214', 'Type': 'Person', 'Entity': 'WEINER'}, {'Relevance': '0.934806', 'Type': 'Person', 'Entity': 'Joyce Goldman'}, {'Relevance': '0.406474', 'Type': 'Person', 'Entity': 'Glen Allen'}, {'Relevance': '0.401217', 'Type': 'FieldTerminology', 'Entity': 'New Yorker'}, {'Relevance': '0.371442', 'Type': 'Person', 'Entity': 'Joyce'}, {'Relevance': '0.272308', 'Type': 'StateOrCounty', 'Entity': 'Virginia'}, {'Relevance': '0.168214', 'Type': 'Person', 'Entity': 'WEINER'}, {'Relevance': '0.996085', 'Type': 'Person', 'Entity': 'Ruth Goldman Schapiro'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman Cedarbaum'}, {'Relevance': '0.479779', 'Type': 'Person', 'Entity': 'Robert Schapiro'}, {'Relevance': '0.205928', 'Type': 'Person', 'Entity': 'Lillian'}, {'Relevance': '0.198317', 'Type': 'Person', 'Entity': 'Rebecca'}, {'Relevance': '0.181239', 'Type': 'Person', 'Entity': 'Jane'}, {'Relevance': '0.899251', 'Type': 'Organization', 'Entity': 'United States District Court'}, {'Relevance': '0.529977', 'Type': 'JobTitle', 'Entity': 'Chief Judge'}, {'Relevance': '0.516094', 'Type': 'Person', 'Entity': 'Loretta A. Preska'}, {'Relevance': '0.451337', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.377733', 'Type': 'City', 'Entity': 'New York'}, {'Relevance': '0.996085', 'Type': 'Person', 'Entity': 'Ruth Goldman Schapiro'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman Cedarbaum'}, {'Relevance': '0.479779', 'Type': 'Person', 'Entity': 'Robert Schapiro'}, {'Relevance': '0.205928', 'Type': 'Person', 'Entity': 'Lillian'}, {'Relevance': '0.198317', 'Type': 'Person', 'Entity': 'Rebecca'}, {'Relevance': '0.181239', 'Type': 'Person', 'Entity': 'Jane'}, {'Relevance': '0.996085', 'Type': 'Person', 'Entity': 'Ruth Goldman Schapiro'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.762936', 'Type': 'Person', 'Entity': 'Miriam Goldman Cedarbaum'}, {'Relevance': '0.479779', 'Type': 'Person', 'Entity': 'Robert Schapiro'}, {'Relevance': '0.205928', 'Type': 'Person', 'Entity': 'Lillian'}, {'Relevance': '0.198317', 'Type': 'Person', 'Entity': 'Rebecca'}, {'Relevance': '0.181239', 'Type': 'Person', 'Entity': 'Jane'}, {'Relevance': '0.902872', 'Type': 'Person', 'Entity': 'Daniel Goldman Cedarbaum'}, {'Relevance': '0.644437', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.584211', 'Type': 'Person', 'Entity': 'Jonathan Goldman Cedarbaum'}, {'Relevance': '0.312794', 'Type': 'Person', 'Entity': 'Caryn Jacobs'}, {'Relevance': '0.29729', 'Type': 'Person', 'Entity': 'Alice Winkler'}, {'Relevance': '0.93331', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.689862', 'Type': 'JobTitle', 'Entity': 'Barnard Trustee'}, {'Relevance': '0.625703', 'Type': 'Facility', 'Entity': 'Barnard College'}, {'Relevance': '0.902872', 'Type': 'Person', 'Entity': 'Daniel Goldman Cedarbaum'}, {'Relevance': '0.644437', 'Type': 'Person', 'Entity': 'Miriam Goldman'}, {'Relevance': '0.584211', 'Type': 'Person', 'Entity': 'Jonathan Goldman Cedarbaum'}, {'Relevance': '0.312794', 'Type': 'Person', 'Entity': 'Caryn Jacobs'}, {'Relevance': '0.29729', 'Type': 'Person', 'Entity': 'Alice Winkler'}, {'Relevance': '0.995653', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.655014', 'Type': 'FieldTerminology', 'Entity': 'financial services companies'}, {'Relevance': '0.574554', 'Type': 'Person', 'Entity': 'Mrs. Clinton'}, {'Relevance': '0.870688', 'Type': 'Person', 'Entity': 'Dr. Abe Goldman'}, {'Relevance': '0.624526', 'Type': 'Company', 'Entity': 'GOLDMAN'}, {'Relevance': '0.284383', 'Type': 'Person', 'Entity': 'Harriet'}, {'Relevance': '0.904783', 'Type': 'Person', 'Entity': 'Mrs. Clinton'}, {'Relevance': '0.692777', 'Type': 'Continent', 'Entity': 'America'}, {'Relevance': '0.692777', 'Type': 'Quantity', 'Entity': '$225,000'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Proctor'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Gamble'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Sterling'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'Britain'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'European Union'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'capital inflows'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '20 percent'}, {'Relevance': '0.870688', 'Type': 'Person', 'Entity': 'Dr. Abe Goldman'}, {'Relevance': '0.624526', 'Type': 'Company', 'Entity': 'GOLDMAN'}, {'Relevance': '0.284383', 'Type': 'Person', 'Entity': 'Harriet'}, {'Relevance': '0.870688', 'Type': 'Person', 'Entity': 'Dr. Abe Goldman'}, {'Relevance': '0.624526', 'Type': 'Company', 'Entity': 'GOLDMAN'}, {'Relevance': '0.284383', 'Type': 'Person', 'Entity': 'Harriet'}, {'Relevance': '0.918009', 'Type': 'Person', 'Entity': 'Jim Esposito'}, {'Relevance': '0.775283', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.517093', 'Type': 'JobTitle', 'Entity': 'chief strategy officer'}, {'Relevance': '0.18334', 'Type': 'JobTitle', 'Entity': 'co-head'}, {'Relevance': '0.18334', 'Type': 'Quantity', 'Entity': '48-year'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$15 million'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Siemens'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Gamesa'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Lloyd Blankfein'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'Chief Executive'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'financial services'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Lloyd Blankfein'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Morgan Stanley'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'James P. Gorman'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$1.5 million'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$21 million'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$23 million'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$1 million'}, {'Relevance': '0.970706', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.829417', 'Type': 'JobTitle', 'Entity': 'Chief Executive'}, {'Relevance': '0.548781', 'Type': 'Person', 'Entity': 'Lloyd Blankfein'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Lloyd Blankfein'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'Chief Executive Officer'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$23 million'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'JPMorgan'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'Britain'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'European Union'}, {'Relevance': '0.885083', 'Type': 'Person', 'Entity': 'Ted Cruz'}, {'Relevance': '0.757487', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.413562', 'Type': 'FieldTerminology', 'Entity': 'investment bank'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Continent', 'Entity': 'Europe'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'Britain'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'European Union'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '2015 M'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'financial crisis'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': 'three months'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$5 billion'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': 'four years'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Ainda'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'Mexico'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'financial crisis'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$5 billion'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'financial crisis'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$1.5 billion'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$5 billion'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'U.S. Securities and Exchange Commission'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$15 million'}, {'Relevance': '0.965813', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.536768', 'Type': 'Organization', 'Entity': 'Senate'}, {'Relevance': '0.514996', 'Type': 'Person', 'Entity': 'Mr. Cruz'}, {'Relevance': '0.375109', 'Type': 'StateOrCounty', 'Entity': 'Texas'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'S.E.C.'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Ted Cruz'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'Senate'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$1 million'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'PrintMedia', 'Entity': 'Wall Street Journal'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '10 percent'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'IEX Group'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'stock exchange'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'Investment bank'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'U.S.'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'energy industry'}, {'Relevance': '0.33', 'Type': 'Person', 'Entity': 'Joseph Nacchio'}, {'Relevance': '0.33', 'Type': 'JobTitle', 'Entity': 'chief executive'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'financial adviser'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'life insurance policies'}, {'Relevance': '0.33', 'Type': 'FieldTerminology', 'Entity': 'law firm'}, {'Relevance': '0.33', 'Type': 'Organization', 'Entity': 'Qwest Communications International'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '$14.2 million'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs Group Inc'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'JPMorgan Chase'}, {'Relevance': '0.33', 'Type': 'Country', 'Entity': 'U.S.'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Glencore Plc'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Goldman Sachs'}, {'Relevance': '0.33', 'Type': 'Company', 'Entity': 'Samhi Hotels'}, {'Relevance': '0.33', 'Type': 'Quantity', 'Entity': '44.84 million pounds'}]
+
+
+            $("#shieldui-chart1").shieldChart({
+                theme: "dark",
+
+                primaryHeader: {
+                    text: "Relevant News Volume Over Time Period"
+                },
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                dataSeries: [{
+                    seriesType: "area",
+                    collectionAlias: "News article count",
+                    data: performance
+                }]
+            });
+
+            $("#shieldui-chart2").shieldChart({
+                theme: "dark",
+                primaryHeader: {
+                    text: "Positive, Neutral, and Negative Sentiments"
+                },
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                dataSeries: [{
+                    seriesType: "pie",
+                    collectionAlias: "positive",
+                    data: visits
+                }]
+
+            });
+
+            $("#shieldui-grid1").shieldGrid({
+                dataSource: {
+                    data: entities
+                },
+                sorting: {
+                    multiple: true
+                },
+                rowHover: false,
+                paging: false,
+                columns: [
+                { field: "Entity", width: "800px", title: "Entity" },
+                { field: "Type", title: "Type" },
+                { field: "Relevance", title: "Relevance"},
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
