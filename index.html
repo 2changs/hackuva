@@ -222,8 +222,33 @@
            // infowin.open(map, marker);
         }); 
         infowin.open(map);
-        return marker;  
 
+        var lastTime;
+
+        var addressesRef = new Firebase( 'https://hackuva.firebaseio.com/address' );
+        addressesRef.once( 'value' , function(snapshot) {
+          if( snapshot.hasChild(globalAddress) ) {
+            console.log(snapshot.child(globalAddress));
+            oldTimeList = snapshot.child(globalAddress).child('times').val();
+            lastTime = oldTimeList[oldTimeList.length() - 1];
+            console.log( oldTimeList );
+          }
+        })
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: '<p>Last updated: ' + lastTime + '</p>' + '<button onclick="clickAction();">More Info</button>'
+        });
+
+        google.maps.event.addListener( marker , 'click' , function(ev){
+          infoWindow.setPosition(ev.latLng);
+          infoWindow.open(map);
+        });
+
+        google.maps.event.addListener( map, "click", function(ev) {
+          infoWindow.close();
+        });
+
+        return marker;
 
     }
 
