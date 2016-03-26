@@ -140,7 +140,7 @@
                     "BuildLong: " + buildingLong 
                 ]);
 
-              var addressesRef = new Firebase('https://hackumbc.firebaseio.com/address');
+              var addressesRef = new Firebase('https://hackuva.firebaseio.com/address');
 
               timeList = [(new Date).getTime()];
               speedList = [speedMbps];
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function getPoints(){
 
-            var addressesRef = new Firebase('https://hackumbc.firebaseio.com/address');
+            var addressesRef = new Firebase('https://hackuva.firebaseio.com/address');
             addressesRef.orderByValue().on("value", function(snapshot) {
               snapshot.forEach(function(data) {
 
