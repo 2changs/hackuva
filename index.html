@@ -28,10 +28,10 @@
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-          <li id="analytics" onclick="showAnalytics()"><a href="/"><i class="fa fa-tasks"></i> Analytics</a></li>
-          <div id="statistics"></div>
           <li id="summary" onclick="showSummary()"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
           <div id="data"></div>
+          <li id="analytics" onclick="showAnalytics()"><a href="/"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <div id="statistics"></div>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
            <li class="dropdown user-dropdown">
@@ -172,7 +172,7 @@
          });
         infowinClosed = false;
         google.maps.event.addListener(marker, 'click', function() { 
-            showAnalytics(marker);
+            showSummary(marker);
 
         }); 
         infowin.open(map);
@@ -211,7 +211,10 @@
         return formattedTime;
     }
 
-    function showAnalytics(latLng) {
+    function showAnalytics() {
+
+      document.getElementById( "analytics" ).className = "selected";
+      document.getElementById( "summary" ).className = "";
 
      //  console.log(latLng);
      // // getPoints();
@@ -221,6 +224,13 @@
       // var address = getReverseGeocodingData(latLng.center.lat(), latLng.center.lng());
       // console.log(address);
 
+      document.getElementById( "data" ).innerHTML = "";
+    }
+
+    function showSummary(latLng) {
+      document.getElementById( "analytics" ).className = "";
+      document.getElementById( "summary" ).className = "selected";
+
       var indexOfAddress = latitudePoint.indexOf(latLng.center.lat());
       var addressOfMarker = addressess[indexOfAddress];
       var averageSpeed = averages[indexOfAddress];
@@ -228,28 +238,12 @@
 
       var lastTimeFormatted = getFormattedTime(lastTime);
 
-      document.getElementById( "analytics" ).className = " selected";
-      document.getElementById( "summary" ).className = "";
-
-      stats = document.getElementById( "statistics" );
+      stats = document.getElementById( "data" );
 
       stats.innerHTML = '\
       <ul>\
         <li>Last Updated:' + lastTimeFormatted + '</li>\
         <li>Average Speed:' + averageSpeed +' Mbps</li>\
-      </ul>\
-      '
-    }
-
-    function showSummary() {
-      document.getElementById( "analytics" ).className = "";
-      document.getElementById( "summary" ).className = " selected";
-
-      stats = document.getElementById( "data" );
-      stats.innerHTML = '\
-      <ul>\
-        <li>Last Updated: 7:36pm</li>\
-        <li>Average Speed: 23.6Mbps</li>\
       </ul>\
       '
 
