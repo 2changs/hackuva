@@ -28,9 +28,10 @@
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-          <li class="selected"><a href="/"><i class="fa fa-list-ul"></i> Search</a></li>
-          <li><a href="/news"><i class="fa fa-globe"></i> News</a></li>
-          <li><a href="/analytics"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <li id="search" class="selected"><a href="/"><i class="fa fa-list-ul"></i> Search</a></li>
+          <li id="news"><a href="/news"><i class="fa fa-globe"></i> News</a></li>
+          <li id="analytics"><a href="/analytics"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <div id="statistics"></div>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
            <li class="dropdown user-dropdown">
@@ -236,7 +237,7 @@
         })
 
         var infoWindow = new google.maps.InfoWindow({
-          content: '<p>Last updated: ' + lastTime + '</p>' + '<button onclick="clickAction();">More Info</button>'
+          content: '<p>Last updated: ' + lastTime + '</p>' + '<button onclick="showAnalytics();">More Info</button>'
         });
 
         google.maps.event.addListener( marker , 'click' , function(ev){
@@ -250,6 +251,21 @@
 
         return marker;
 
+    }
+
+    function showAnalytics() {
+      getPoints();
+
+      document.getElementById( "analytics" ).className = " selected";
+      document.getElementById( "search" ).className = "";
+
+      stats = document.getElementById( "statistics" );
+      stats.innerHTML = '\
+      <ul>\
+        <li>Last Updated: 7:36pm</li>\
+        <li>Average Speed: 23.6Mbps</li>\
+      </ul>\
+      '
     }
 
     var interval = setInterval(function () {
