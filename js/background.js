@@ -14,6 +14,7 @@
         var speedMbpsList = [];
         var averageSpeed;
         var averages = [];
+        var addressess = [];
         function getReverseGeocodingData(lat, lng) {
 
             var latlng = new google.maps.LatLng(lat, lng);
@@ -255,9 +256,11 @@ document.addEventListener('DOMContentLoaded', function(){
                         if(data.val().average < 0){
                             var avg = -1*data.val().average;
                             averages.push(avg.toFixed(2));
+                            addressess.push(data.key());
                         }
                         else{
                             averages.push(data.val().average.toFixed(2));
+                            addressess.push(data.key());
                         }
                         
      

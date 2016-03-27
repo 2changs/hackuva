@@ -72,6 +72,7 @@
     var LatSpeed = {};
     var markers = [];
     var prevInfoWindow;
+    var lastTime;
       function initialize() {
       var mapProp = {
         center:new google.maps.LatLng(38.033554,-78.507980),
@@ -171,64 +172,73 @@
          });
         infowinClosed = false;
         google.maps.event.addListener(marker, 'click', function() { 
-            if(infowinClosed == false){
-                infowin.close(map);
-                infowinClosed = true;
+            showAnalytics(marker);
 
-            }
-            else{
-                infowin.open(map);
-                infowClosed = false;
-
-            }
-           //  if( prevInfoWindow ) {
-           //     prevInfoWindow.close();
-           //  }
-           
-           // prev_infowindow = infowin;
-           // infowin.open(map, marker);
         }); 
         infowin.open(map);
+        return marker;  
+    }
 
-        var lastTime;
-
+    function getLastUpdatedTime(address){
+        var lastUpdatedTime;
+        var timeList;
         var addressesRef = new Firebase( 'https://hackuva.firebaseio.com/address' );
         addressesRef.once( 'value' , function(snapshot) {
-          if( snapshot.hasChild(globalAddress) ) {
-            console.log(snapshot.child(globalAddress));
-            oldTimeList = snapshot.child(globalAddress).child('times').val();
-            lastTime = oldTimeList[oldTimeList.length() - 1];
-            console.log( oldTimeList );
+          if( snapshot.hasChild(address) ) {
+            timeList = snapshot.child(address).child('times').val();
+            lastTime = timeList[timeList.length - 1];
+            console.log(lastTime);
+            // oldTimeList = snapshot.child(globalAddress).child('times').val();
+            // lastTime = oldTimeList[oldTimeList.length() - 1];
+            // console.log( oldTimeList );
           }
-        })
-
-        var infoWindow = new google.maps.InfoWindow({
-          content: '<p>Last updated: ' + lastTime + '</p>' + '<button onclick="showSummary();">More Info</button>'
         });
 
-        google.maps.event.addListener( marker , 'click' , function(ev){
-          infoWindow.setPosition(ev.latLng);
-          infoWindow.open(map);
-        });
 
-        google.maps.event.addListener( map, "click", function(ev) {
-          infoWindow.close();
-        });
-
-        return marker;
 
     }
 
-    function showAnalytics() {
-      getPoints();
+    function getFormattedTime(unixTime){
+        var date = new Date(unixTime*1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        return formattedTime;
+    }
+
+    function showAnalytics(latLng) {
+
+     //  console.log(latLng);
+     // // getPoints();
+     // console.log(latLng);
+     // console.log(latLng.center.lat());
+     // console.log(latLng.center.lng());
+      // var address = getReverseGeocodingData(latLng.center.lat(), latLng.center.lng());
+      // console.log(address);
+
+      var indexOfAddress = latitudePoint.indexOf(latLng.center.lat());
+      var addressOfMarker = addressess[indexOfAddress];
+      var averageSpeed = averages[indexOfAddress];
+      getLastUpdatedTime(addressOfMarker);
+
+      var lastTimeFormatted = getFormattedTime(lastTime);
 
       document.getElementById( "analytics" ).className = " selected";
       document.getElementById( "summary" ).className = "";
 
       stats = document.getElementById( "statistics" );
-      stats.innerHTML = 'graph goes here'
 
-      document.getElementById( "data" ).innerHTML = ""
+      stats.innerHTML = '\
+      <ul>\
+        <li>Last Updated:' + lastTimeFormatted + '</li>\
+        <li>Average Speed:' + averageSpeed +' Mbps</li>\
+      </ul>\
+      '
     }
 
     function showSummary() {
