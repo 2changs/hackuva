@@ -28,9 +28,8 @@
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-          <li id="search" class="selected"><a href="/"><i class="fa fa-list-ul"></i> Search</a></li>
-          <li id="news"><a href="/news"><i class="fa fa-globe"></i> News</a></li>
-          <li id="analytics"><a href="/analytics"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <li class="selected"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
+          <li><a href="dashboard.html"><i class="fa fa-tasks"></i> Analytics</a></li>
           <div id="statistics"></div>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
@@ -54,7 +53,7 @@
         <div class="col-xs-12">
           <form role="form" action="/news" method="POST">
             <div class="form-group">
-              <input class="form-control" placeholder="Search location (i.e. Bavaro Hall)" name="keyword">
+              <input class="form-control" placeholder="Location (i.e. Bavaro Hall)" name="keyword">
             </div>
             <button type="submit" class="btn btn-default">Search</button>
             <button type="reset" class="btn btn-default">Reset</button>
