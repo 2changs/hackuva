@@ -28,8 +28,8 @@
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-          <li id="summary" class="selected"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
-          <li id="analytics"><a href=""><i class="fa fa-tasks"></i> Analytics</a></li>
+          <li id="analytics"><a href="/"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <li id="summary"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
           <div id="statistics"></div>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
@@ -129,13 +129,6 @@
         });
         map.fitBounds(bounds);
       });
-         //  if( prevInfoWindow ) {
-         //     prevInfoWindow.close();
-         //  }
-         
-         // prev_infowindow = infowin;
-         // infowin.open(map, marker);
-
 
     if (navigator.geolocation) {
          navigator.geolocation.getCurrentPosition(function (position) {
