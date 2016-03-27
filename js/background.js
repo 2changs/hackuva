@@ -144,8 +144,11 @@
               var addressesRef = new Firebase('https://hackuva.firebaseio.com/address');
 
               timeList = [(new Date).getTime()];
+              allTimeList = [(new Date).getTime()];
+              allSpeedList = [speedMbps];
               speedList = [speedMbps];
               averageSpeed = Number(speedMbps);
+
 
               internetSpeed = averageSpeed;
 
@@ -156,6 +159,12 @@
 
                         oldTimeList = snapshot.child(globalAddress).child('times').val(); 
                         oldSpeedList = snapshot.child(globalAddress).child('speed').val();
+
+                        oldAllTimeList = snapshot.child(globalAddress).child('allTimes').val();
+                        oldAllSpeedList = snapshot.child(globalAddress).child('allSpeeds').val();
+
+                        allSpeedList =  oldAllSpeedList.concat(allSpeedList);
+                        allTimeList =   oldAllTimeList.concat(allTimeList);
 
                         if(timeList[0]-oldTimeList[oldTimeList.length-1]<600000){
 
@@ -194,7 +203,9 @@
                         addressesRef.child(globalAddress).set({
                             times: timeList,
                             speed: speedList,
-                            average: averageSpeed 
+                            average: averageSpeed, 
+                            allSpeeds: allSpeedList,
+                            allTimes: allTimeList
                         })
 
                   }
@@ -202,7 +213,9 @@
                     addressesRef.child(globalAddress).set({
                         times: timeList,
                         speed: speedList,
-                        average: averageSpeed
+                        average: averageSpeed,
+                        allSpeeds: allSpeedList,
+                        allTimes: allTimeList
                     })
                   }
                 });
