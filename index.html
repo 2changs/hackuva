@@ -28,8 +28,8 @@
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-          <li class="selected"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
-          <li><a href="dashboard.html"><i class="fa fa-tasks"></i> Analytics</a></li>
+          <li id="summary" class="selected"><a href="/"><i class="fa fa-list-ul"></i> Summary</a></li>
+          <li id="analytics"><a href=""><i class="fa fa-tasks"></i> Analytics</a></li>
           <div id="statistics"></div>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
@@ -135,34 +135,7 @@
          
          // prev_infowindow = infowin;
          // infowin.open(map, marker);
-      infowin.open(map);
 
-      var lastTime;
-
-      var addressesRef = new Firebase( 'https://hackuva.firebaseio.com/address' );
-      addressesRef.once( 'value' , function(snapshot) {
-        if( snapshot.hasChild(globalAddress) ) {
-          console.log(snapshot.child(globalAddress));
-          oldTimeList = snapshot.child(globalAddress).child('times').val();
-          lastTime = oldTimeList[oldTimeList.length() - 1];
-          console.log( oldTimeList );
-        }
-      })
-
-      var infoWindow = new google.maps.InfoWindow({
-        content: '<p>Last updated: ' + lastTime + '</p>' + '<button onclick="clickAction();">More Info</button>'
-      });
-
-      google.maps.event.addListener( marker , 'click' , function(ev){
-        infoWindow.setPosition(ev.latLng);
-        infoWindow.open(map);
-      });
-
-      google.maps.event.addListener( map, "click", function(ev) {
-        infoWindow.close();
-      });
-
-      return marker;  
 
     if (navigator.geolocation) {
          navigator.geolocation.getCurrentPosition(function (position) {
@@ -256,7 +229,7 @@
       getPoints();
 
       document.getElementById( "analytics" ).className = " selected";
-      document.getElementById( "search" ).className = "";
+      document.getElementById( "summary" ).className = "";
 
       stats = document.getElementById( "statistics" );
       stats.innerHTML = '\
